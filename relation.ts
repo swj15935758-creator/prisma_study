@@ -25,41 +25,41 @@ const prisma = new PrismaClient();
 
     console.log("foundMember", foundMember)
 
-    // if(foundMember){
-    //     const post1:PostCreateDTO = {
-    //         postTitle: "테스트 게시글 작성1",
-    //         postContent:"테스트 게시글 내용1",
-    //         memberId: foundMember.id
-    //     }
+    if(foundMember){
+        const post1:PostCreateDTO = {
+            postTitle: "테스트 게시글 작성1",
+            postContent:"테스트 게시글 내용1",
+            memberId: foundMember.id
+        }
 
-    //     const createdPost = await prisma.post.create({
-    //         data: post1
-    //     })
+        const createdPost = await prisma.post.create({
+            data: post1
+        })
 
-    //     console.log(createdPost)
-    // }
+        console.log(createdPost)
+    }
 
-    // if(foundMember){
-    //     // 여러 개 작성
-    //     const post2:PostCreateDTO = {
-    //         postTitle: "게시글2",
-    //         postContent: "게시글 내용2",
-    //         memberId: foundMember.id
-    //     }
+    if(foundMember){
+        // 여러 개 작성
+        const post2:PostCreateDTO = {
+            postTitle: "게시글2",
+            postContent: "게시글 내용2",
+            memberId: foundMember.id
+        }
 
-    //     const post3:PostCreateDTO = {
-    //         postTitle: "게시글3",
-    //         postContent: "게시글 내용3",
-    //         memberId: foundMember.id
-    //     }
+        const post3:PostCreateDTO = {
+            postTitle: "게시글3",
+            postContent: "게시글 내용3",
+            memberId: foundMember.id
+        }
 
-    //     const posts:PostCreateDTO[] = [post2, post3]
-    //     const createdPosts = await prisma.post.createMany({
-    //         data: posts
-    //     })
+        const posts:PostCreateDTO[] = [post2, post3]
+        const createdPosts = await prisma.post.createMany({
+            data: posts
+        })
 
-    //     console.log(createdPosts)
-    // }
+        console.log(createdPosts)
+    }
 
     // JOIN == include(포함)
     // 흰둥이가 작성한 모든 게시글 가져오기
@@ -72,27 +72,27 @@ const prisma = new PrismaClient();
 
     // console.log(foundMemberWithPosts?.posts)
 
-    // // 게시글을 작성자와 함께 전체 조회
-    // const foundPostsWithMember = await prisma.post.findMany({
-    //     include: {
-    //         member: true
-    //     }
-    // })
+    // 게시글을 작성자와 함께 전체 조회
+    const foundPostsWithMember = await prisma.post.findMany({
+        include: {
+            member: true
+        }
+    })
 
     // select 문법
     // console.log(foundPostsWithMember)
 
-    // // 게시글 전체 및 작성자의 이름만 선택 조회
-    // const foundPostsWithMemberName = await prisma.post.findMany({
-    //     include: {
-    //         member: {
-    //             select: {
-    //                 memberName: true,
-    //                 memberEmail: true
-    //             }
-    //         }
-    //     }
-    // })
+    // 게시글 전체 및 작성자의 이름만 선택 조회
+    const foundPostsWithMemberName = await prisma.post.findMany({
+        include: {
+            member: {
+                select: {
+                    memberName: true,
+                    memberEmail: true
+                }
+            }
+        }
+    })
 
     // console.log(foundPostsWithMemberName)
 
@@ -140,21 +140,21 @@ const prisma = new PrismaClient();
     // }
 
     // 1. 정렬(orderBy)
-    // // 최신순
-    // const foundPosts = await prisma.post.findMany({
-    //     include: {
-    //         member: {
-    //             select: {
-    //                 memberName: true
-    //             }
-    //         }
-    //     },
-    //     orderBy: {
-    //         id: "desc",
-    //         // postCreateAt: "desc" // 최신날짜순
-    //         // postCreateAt: "asc" // 가장오래된순
-    //     }
-    // })
+    // 최신순
+    const foundPosts = await prisma.post.findMany({
+        include: {
+            member: {
+                select: {
+                    memberName: true
+                }
+            }
+        },
+        orderBy: {
+            id: "desc",
+            // postCreateAt: "desc" // 최신날짜순
+            // postCreateAt: "asc" // 가장오래된순
+        }
+    })
     // console.log(foundPosts)
 
     // 2. 페이징 처리
@@ -162,23 +162,23 @@ const prisma = new PrismaClient();
     // 1 -> 1~10
     // 2 -> 11~20
     // Promise.all()
-    // let page = 2
-    // let perPage = 10
+    let page = 2
+    let perPage = 10
 
-    // const [post, totalCount] = await Promise.all([
-    //     prisma.post.findMany({
-    //         skip: (page - 1) * perPage,
-    //         take: perPage,
-    //         orderBy: { id: "asc" },
-    //         include: {
-    //             member: { select: { memberName: true }}
-    //         }
-    //     }),
-    //     prisma.post.count()
-    // ])
+    const [post, totalCount] = await Promise.all([
+        prisma.post.findMany({
+            skip: (page - 1) * perPage,
+            take: perPage,
+            orderBy: { id: "asc" },
+            include: {
+                member: { select: { memberName: true }}
+            }
+        }),
+        prisma.post.count()
+    ])
 
-    // console.log(post)
-    // console.log(totalCount)
+    console.log(post)
+    console.log(totalCount)
 
 
 })()
