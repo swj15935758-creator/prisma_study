@@ -1,0 +1,12 @@
+{
+    "type": "module",
+  "devDependencies": {
+    "@prisma/client": "6.4.1",
+    "prisma": "6.4.1",
+    "ts-node": "^10.9.2"
+  },
+  "dependencies": {
+    "global": "^4.4.0",
+    "typescript": "^5.9.3"
+  }
+}

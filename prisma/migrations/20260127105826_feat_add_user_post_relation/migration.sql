@@ -1,0 +1,2 @@
+-- AlterTable
+ALTER TABLE `tbl_post` MODIFY `postCreateAt` DATETIME(3) NOT NULL DEFAULT CURRENT_TIMESTAMP(3);

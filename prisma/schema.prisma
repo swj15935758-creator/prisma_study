@@ -1,0 +1,47 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
+// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+
+generator client {
+    provider = "prisma-client-js"
+}
+
+datasource db {
+    provider = "mysql"
+    url      = env("DATABASE_URL")
+}
+
+// 관계 맺기위한 post테이블 추가
+// N:N의 관계도 가능하지만, 너무 복잡하여 1:N으로 풀어낸다.
+// 하지만 Prisma는 내부적으로 양방향 관계를 맺어야 사용할 수 있다.
+
+model Member {
+    // pk 
+    id             Int      @id @default(autoincrement())
+    memberEmail    String   @unique
+    memberPassword String
+    memberName     String
+    memberAge      Int?
+    memberCreateAt DateTime @default(now())
+
+    posts Post[]
+
+    // 테이블의 이름을 매핑
+    @@map("tbl_member")
+}
+
+model Post {
+    id Int @id @default(autoincrement())
+    postTitle String
+    postContent String
+    postStatus String @default("PUBLIC")
+    postCreateAt DateTime @default(now())
+
+    // FK
+    memberId Int
+    member Member @relation(fields: [memberId], references: [id])
+
+    @@map("tbl_post")
+}
